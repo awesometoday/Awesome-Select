@@ -248,16 +248,23 @@ function render(){
 
 function renderCard(p){
   const q=qty[p.id]||0, disc=Math.round((1-p.price/p.orig)*100);
+  const isTshirt = TSHIRT_IDS.includes(p.id);
+  const effP = effectivePrice(p.id);
+  const discountOn = isTshirt && tshirtDiscountActive();
+  const subAmt = q > 0 ? effP * q : 0;
   return `<div class="prod-card" id="card-${p.id}">
     <div class="card-top">
       <div class="letter">${p.id}</div>
       <div class="prod-info">
         <div class="prod-name">${p.name}</div>
         ${p.sub?`<div class="prod-sub">${p.sub}</div>`:''}
-        ${p.tag?`<div class="prod-tags"><span class="tag tag-dis">${p.tag}</span></div>`:''}
+        <div class="prod-tags">
+          ${p.tag?`<span class="tag tag-dis">${p.tag}</span>`:''}
+          ${discountOn?'<span class="tag" style="background:#FEF3C7;color:#92400E">2件優惠 $500</span>':''}
+        </div>
       </div>
       <div class="prod-price">
-        <div class="prod-sale">$${p.price.toLocaleString()}</div>
+        <div class="prod-sale" id="price-${p.id}">${discountOn?'<s style='font-size:11px;color:#9ca3af'>$580</s> <span style='color:var(--red)'>$500</span>':'$'+p.price.toLocaleString()}</div>
         <div class="prod-orig">$${p.orig.toLocaleString()}</div>
         <div class="prod-disc">省${disc}%</div>
       </div>
@@ -269,7 +276,7 @@ function renderCard(p){
         <span class="step-display ${q===0?'zero':''}" id="n-${p.id}">${q}</span>
         <button class="step-btn plus" onclick="chg('${p.id}',1)">＋</button>
       </div>
-      <span class="step-sub ${q===0?'zero':''}" id="sub-${p.id}">${q>0?'$'+(p.price*q).toLocaleString():''}</span>
+      <span class="step-sub ${q===0?'zero':''}" id="sub-${p.id}">${subAmt>0?'$'+subAmt.toLocaleString():''}</span>
     </div>
   </div>`;
 }
@@ -278,13 +285,42 @@ function chg(id,d){
   const p=findP(id); if(!p)return;
   qty[id]=Math.max(0,(qty[id]||0)+d);
   const q=qty[id];
-  const ne=document.getElementById('n-'+id), se=document.getElementById('sub-'+id);
-  if(ne){ne.textContent=q; ne.className='step-display'+(q===0?' zero':'');}
-  if(se){se.textContent=q>0?'$'+(p.price*q).toLocaleString():''; se.className='step-sub'+(q===0?' zero':'');}
+  // If T-shirt, re-render both T-shirt cards to update discount state
+  if(TSHIRT_IDS.includes(id)){
+    TSHIRT_IDS.forEach(tid => {
+      const card = document.getElementById('card-'+tid);
+      if(card){
+        const tp = findP(tid);
+        if(tp){
+          const tq = qty[tid]||0;
+          card.outerHTML = renderCard(tp);
+        }
+      }
+    });
+  } else {
+    const ne=document.getElementById('n-'+id), se=document.getElementById('sub-'+id);
+    if(ne){ne.textContent=q; ne.className='step-display'+(q===0?' zero':'');}
+    if(se){const ep=effectivePrice(id);se.textContent=q>0?'$'+(ep*q).toLocaleString():''; se.className='step-sub'+(q===0?' zero':'');}
+  }
   updateTotal();
 }
 function findP(id){for(const b of BRANDS)for(const p of b.products)if(p.id===id)return p;}
-function getSel(){return Object.keys(qty).filter(id=>qty[id]>0).map(id=>({...findP(id),qty:qty[id]})).filter(Boolean);}
+
+// T-shirt 2件以上優惠 $500/件
+const TSHIRT_IDS = ['M','N'];
+function effectivePrice(id){
+  const p = findP(id);
+  if(!p) return 0;
+  if(TSHIRT_IDS.includes(id)){
+    const totalTshirts = TSHIRT_IDS.reduce((s,tid)=>s+(qty[tid]||0), 0);
+    return totalTshirts >= 2 ? 500 : p.price;
+  }
+  return p.price;
+}
+function tshirtDiscountActive(){
+  return TSHIRT_IDS.reduce((s,tid)=>s+(qty[tid]||0), 0) >= 2;
+}
+function getSel(){return Object.keys(qty).filter(id=>qty[id]>0).map(id=>({...findP(id),qty:qty[id],effPrice:effectivePrice(id)})).filter(Boolean);}
 function toggleCredit(){
   useCredit=!useCredit;
   const sw=document.getElementById('credSw');
@@ -297,7 +333,7 @@ function toggleCredit(){
 }
 function updateTotal(){
   const sel=getSel();
-  const subtotal=sel.reduce((s,p)=>s+p.price*p.qty,0);
+  const subtotal=sel.reduce((s,p)=>s+(p.effPrice||p.price)*p.qty,0);
   const count=sel.reduce((s,p)=>s+p.qty,0);
   const discount = (useCredit && subtotal>0) ? 300 : 0;
   const total = Math.max(0, subtotal - discount);
@@ -313,7 +349,7 @@ function updateTotal(){
 }
 function openDrawer(){
   const sel=getSel(); if(!sel.length)return;
-  const subtotal=sel.reduce((s,p)=>s+p.price*p.qty,0);
+  const subtotal=sel.reduce((s,p)=>s+(p.effPrice||p.price)*p.qty,0);
   const total=Math.max(0, subtotal - (useCredit?300:0));
   document.getElementById('orderBox').innerHTML=
     '<div class="order-box-title">你的選購清單</div>'+
@@ -337,9 +373,9 @@ function submitOrder(){
   if(!name){alert('請填寫小朋友稱呼');document.getElementById('fName').focus();return;}
   if(!line){alert('請填寫 LINE 暱稱');document.getElementById('fLine').focus();return;}
   const now=new Date(), ds=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
-  const subtotal=sel.reduce((s,p)=>s+p.price*p.qty,0);
+  const subtotal=sel.reduce((s,p)=>s+(p.effPrice||p.price)*p.qty,0);
   const total=Math.max(0,subtotal-(useCredit?300:0));
-  const lines=sel.map(p=>`${p.id}. ${p.name} x${p.qty}  $${(p.price*p.qty).toLocaleString()}`).join('\n');
+  const lines=sel.map(p=>`${p.id}. ${p.name} x${p.qty}  $${((p.effPrice||p.price)*p.qty).toLocaleString()}${TSHIRT_IDS.includes(p.id)&&tshirtDiscountActive()?' (2件優惠價$500/件)':''}`).join('\n');
   lastTxt=`【好森嚴選 五月號登記】\n時間：${ds}\n稱呼：${name}\nLINE：${line}${pickup?'\n取貨：'+pickup:''}\n付款：${payment}${credit==='使用 $300 購物金'?'\n購物金：使用 $300':''}\n────────────\n${lines}\n────────────\n合計：$${total.toLocaleString()}${note?'\n備註：'+note:''}\n（請將此訊息傳給好森嚴選確認）`;
   if(SHEETS_URL)fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({ds,name,line,pickup,payment,credit,note,items:lines,total})}).catch(()=>{});
   document.getElementById('drawerBg').classList.remove('open');
