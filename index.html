@@ -156,6 +156,14 @@ body{font-family:-apple-system,'Noto Sans TC','PingFang TC',sans-serif;backgroun
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="drawer-title" style="margin:0">✏️ 填寫登記資料</div><button onclick="document.getElementById('drawerBg').classList.remove('open')" style="background:var(--gray-l);border:none;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer;color:var(--gray);flex-shrink:0">×</button></div>
     <div class="drawer-note">確認選購清單後填好資料送出，我們會盡快與您確認。</div>
     <div class="order-box" id="orderBox"></div>
+    <div class="fg">
+      <label class="fl">是否使用 $300 購物金</label>
+      <div class="radio-row">
+        <label class="radio-opt"><input type="radio" name="formCredit" value="yes" onchange="toggleFormCredit(true)"> 🎁 是，折抵 $300</label>
+        <label class="radio-opt"><input type="radio" name="formCredit" value="no" checked onchange="toggleFormCredit(false)"> 不使用</label>
+      </div>
+      <div id="formCreditNote" style="display:none;margin-top:6px;font-size:12px;color:var(--green-mid);font-weight:600;padding:6px 10px;background:var(--green-faint);border-radius:6px">✓ 已套用 $300 折抵，合計將調整</div>
+    </div>
     <div class="fg"><label class="fl req">小朋友稱呼／姓名</label><input class="fi" id="fName" placeholder="例：小明、Amy"></div>
     <div class="fg"><label class="fl req">LINE 暱稱</label><input class="fi" id="fLine" placeholder="方便我們在 LINE 上聯繫您"></div>
     <div class="fg">
@@ -321,6 +329,11 @@ function openDrawer(){
     '<div class="order-box-title">你的選購清單</div>'+
     sel.map(p=>`<div class="order-row"><span>${p.id}. ${p.name} ×${p.qty}</span><span>$${(p.price*p.qty).toLocaleString()}</span></div>`).join('')+
     `<div class="order-total"><span>合計</span><span>$${total.toLocaleString()}</span></div>`;
+  // Reset credit radio to match current state
+  const radios = document.querySelectorAll('input[name="formCredit"]');
+  radios.forEach(r => r.checked = (r.value === (useCredit?'yes':'no')));
+  const note = document.getElementById('formCreditNote');
+  if(note) note.style.display = useCredit ? 'block' : 'none';
   document.getElementById('drawerBg').classList.add('open');
 }
 function submitOrder(){
@@ -334,7 +347,8 @@ function submitOrder(){
   if(!name){alert('請填寫小朋友稱呼');document.getElementById('fName').focus();return;}
   if(!line){alert('請填寫 LINE 暱稱');document.getElementById('fLine').focus();return;}
   const now=new Date(), ds=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
-  const total=sel.reduce((s,p)=>s+p.price*p.qty,0);
+  const subtotal=sel.reduce((s,p)=>s+p.price*p.qty,0);
+  const total=Math.max(0,subtotal-(useCredit?300:0));
   const lines=sel.map(p=>`${p.id}. ${p.name} x${p.qty}  $${(p.price*p.qty).toLocaleString()}`).join('\n');
   lastTxt=`【好森嚴選 五月號登記】\n時間：${ds}\n稱呼：${name}\nLINE：${line}${pickup?'\n取貨：'+pickup:''}\n付款：${payment}${credit==='使用 $300 購物金'?'\n購物金：使用 $300':''}\n────────────\n${lines}\n────────────\n合計：$${total.toLocaleString()}${note?'\n備註：'+note:''}\n（請將此訊息傳給好森嚴選確認）`;
   if(SHEETS_URL)fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({ds,name,line,pickup,payment,credit,note,items:lines,total})}).catch(()=>{});
@@ -344,7 +358,27 @@ function submitOrder(){
   document.getElementById('sucBg').classList.add('open');
   document.getElementById('creditBar').style.display='none';
   document.getElementById('totalBarWrap').style.display='none';
-  window.scrollTo(0,0);
+  document.body.style.overflow='hidden';
+  document.getElementById('sucBg').scrollTop=0;
+}
+function toggleFormCredit(use){
+  useCredit = use;
+  updateTotal();
+  const note = document.getElementById('formCreditNote');
+  if(note) note.style.display = use ? 'block' : 'none';
+  // Update order summary in form
+  const sel = getSel();
+  const total = Math.max(0, sel.reduce((s,p)=>s+p.price*p.qty,0) - (use?300:0));
+  const subtotal = sel.reduce((s,p)=>s+p.price*p.qty,0);
+  const box = document.getElementById('orderBox');
+  if(box){
+    const discountRow = use ? `<div class="order-row" style="color:var(--green-mid)"><span>🎁 購物金折抵</span><span>－$300</span></div>` : '';
+    box.innerHTML =
+      '<div class="order-box-title">你的選購清單</div>' +
+      sel.map(p=>`<div class="order-row"><span>${p.id}. ${p.name} ×${p.qty}</span><span>$${(p.price*p.qty).toLocaleString()}</span></div>`).join('') +
+      discountRow +
+      `<div class="order-total"><span>合計</span><span>$${total.toLocaleString()}</span></div>`;
+  }
 }
 function openLine(){
   const mob=/Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -357,7 +391,28 @@ function copyOrder(){
   else{fallbackCopy();doFeedback();}
 }
 function fallbackCopy(){const ta=document.createElement('textarea');ta.value=lastTxt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);}
-function resetAll(){qty={};document.getElementById('sucBg').classList.remove('open');['fName','fPhone','fLine','fNote'].forEach(id=>document.getElementById(id).value='');document.getElementById('fPickup').value='';render();updateTotal();}
+function resetAll(){
+  qty={};
+  document.getElementById('sucBg').classList.remove('open');
+  document.getElementById('creditBar').style.display='';
+  document.getElementById('totalBarWrap').style.display='';
+  document.body.style.overflow='';
+  useCredit=false;
+  const sw=document.getElementById('credSw');
+  const lbl=document.getElementById('credLbl');
+  const sub=document.getElementById('creditSubtxt');
+  if(sw) sw.classList.remove('on');
+  if(lbl) lbl.textContent='不使用';
+  if(sub) sub.textContent='點右側開關即可折抵';
+  ['fName','fLine','fNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const payment=document.querySelector('input[name="payment"]');
+  if(payment) document.querySelectorAll('input[name="payment"]').forEach((r,i)=>r.checked=i===0);
+  document.querySelectorAll('input[name="formCredit"]').forEach(r=>r.checked=r.value==='no');
+  const fcNote=document.getElementById('formCreditNote');
+  if(fcNote) fcNote.style.display='none';
+  render();
+  updateTotal();
+}
 render(); updateTotal();
 </script>
 </body>
