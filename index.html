@@ -150,7 +150,7 @@ body{font-family:-apple-system,'Noto Sans TC','PingFang TC',sans-serif;backgroun
   <button class="go-btn" id="goBtn" onclick="openDrawer()" disabled>填寫資料  送出登記 →</button>
 </div></div>
 
-<div class="drawer-bg" id="drawerBg" onclick="if(event.target===this)this.classList.remove('open')">
+<div class="drawer-bg" id="drawerBg" style="display:none" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="drawer">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="width:38px;height:4px;background:var(--gray-l);border-radius:2px;flex:1;margin:0 auto"></div></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="drawer-title" style="margin:0">✏️ 填寫登記資料</div><button onclick="document.getElementById('drawerBg').classList.remove('open')" style="background:var(--gray-l);border:none;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer;color:var(--gray);flex-shrink:0">×</button></div>
@@ -185,7 +185,7 @@ body{font-family:-apple-system,'Noto Sans TC','PingFang TC',sans-serif;backgroun
   </div>
 </div>
 
-<div class="suc-bg" id="sucBg">
+<div class="suc-bg" id="sucBg" style="display:none">
   <div class="suc-inner">
     <div class="suc-icon">🌿</div>
     <div class="suc-title">登記完成！</div>
@@ -439,6 +439,10 @@ function resetAll(){
   render();
   updateTotal();
 }
+// Safety reset on page load
+document.getElementById('sucBg').style.display='none';
+document.getElementById('drawerBg').style.display='none';
+document.body.style.overflow='';
 render(); updateTotal();
 </script>
 </body>
