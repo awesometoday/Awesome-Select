@@ -11,34 +11,40 @@
   --green-light:#74c69d;--green-pale:#d8f3dc;--green-faint:#f0fbf3;
   --red:#c0392b;--gray:#6b7280;--gray-l:#e5e7eb;--bg:#f4f7f4;
 }
-body{font-family:-apple-system,'Noto Sans TC','PingFang TC',sans-serif;background:var(--bg);color:#1a2e1a;padding-bottom:130px}
-.hdr{background:var(--green-dark);color:white;padding:14px 16px 12px;position:sticky;top:0;z-index:50}
+body{font-family:-apple-system,'Noto Sans TC','PingFang TC',sans-serif;color:#1a2e1a;background:var(--bg)}
+
+/* ── Views ── */
+.view{display:none;flex-direction:column;min-height:100vh}
+.view.active{display:flex}
+
+/* ── Header ── */
+.hdr{background:var(--green-dark);color:white;padding:14px 16px 12px;position:sticky;top:0;z-index:10}
 .hdr-title{font-size:19px;font-weight:700;letter-spacing:.04em}
 .hdr-sub{font-size:11px;opacity:.6;margin-top:2px}
 .hdr-note{font-size:11px;background:rgba(255,255,255,.1);border-radius:6px;padding:6px 10px;margin-top:8px;color:rgba(255,255,255,.8);line-height:1.55}
-.flyer-block{background:#111}
-.flyer-img{width:100%;display:block;cursor:zoom-in}
-.flyer-caption{background:#222;color:rgba(255,255,255,.5);font-size:11px;text-align:center;padding:6px;letter-spacing:.04em}
-.lightbox{display:none;background:#000;min-height:100vh}
-.lightbox.open{display:block}
-.lightbox-inner{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:8px;background:#000}
-.lightbox img{width:100%;height:auto;display:block;cursor:zoom-out}
-.lb-close{position:sticky;top:8px;left:calc(100% - 48px);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);color:white;border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;margin:8px 8px 0 auto}
+
+/* ── Flyer ── */
+.flyer-wrap{background:#111;cursor:zoom-in}
+.flyer-img{width:100%;display:block}
+.flyer-cap{background:#222;color:rgba(255,255,255,.5);font-size:11px;text-align:center;padding:6px}
+
+/* ── Brand block ── */
 .brand-block{margin:14px 12px 0}
 .brand-hdr{background:var(--green-dark);color:white;border-radius:10px 10px 0 0;padding:9px 14px;display:flex;align-items:center;gap:8px}
 .brand-name{font-size:14px;font-weight:700}
 .brand-desc{font-size:10.5px;opacity:.6;margin-left:auto;text-align:right;line-height:1.35}
-.prod-list{background:white;border-radius:0 0 10px 10px;border:1px solid var(--gray-l);border-top:none;overflow:hidden}
+.prod-list{background:white;border-radius:0 0 10px 10px;border:1px solid var(--gray-l);border-top:none;overflow:hidden;margin-bottom:2px}
 .prod-card{border-bottom:1px solid #f0f0f0}
 .prod-card:last-child{border-bottom:none}
 .card-top{display:flex;align-items:flex-start;padding:12px 13px 0;gap:10px}
 .letter{width:28px;height:28px;border-radius:50%;background:var(--green-dark);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .prod-info{flex:1}
-.prod-name{font-size:13.5px;font-weight:600;color:#1a2e1a;line-height:1.35}
+.prod-name{font-size:13.5px;font-weight:600;line-height:1.35}
 .prod-sub{font-size:11px;color:var(--gray);margin-top:2px}
-.prod-tags{display:flex;gap:4px;margin-top:4px}
+.prod-tags{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
 .tag{font-size:9px;padding:1px 6px;border-radius:4px;font-weight:700}
-.tag-dis{background:#EDE9FE;color:#5B21B6}
+.tag-pre{background:#EDE9FE;color:#5B21B6}
+.tag-sale{background:#FEF3C7;color:#92400E}
 .prod-price{text-align:right;flex-shrink:0}
 .prod-sale{font-size:15px;font-weight:700;color:var(--red)}
 .prod-orig{font-size:10px;color:#9ca3af;text-decoration:line-through;margin-top:2px}
@@ -46,120 +52,136 @@ body{font-family:-apple-system,'Noto Sans TC','PingFang TC',sans-serif;backgroun
 .card-bottom{display:flex;align-items:center;justify-content:space-between;padding:10px 13px 12px;gap:8px}
 .qty-label{font-size:12px;color:var(--gray);min-width:28px}
 .stepper{display:flex;align-items:center}
-.step-btn{width:38px;height:38px;border-radius:50%;border:2px solid var(--gray-l);background:var(--bg);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;user-select:none;transition:background .12s}
+.step-btn{width:38px;height:38px;border-radius:50%;border:2px solid var(--gray-l);background:var(--bg);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;user-select:none}
 .step-btn.minus{color:var(--gray)}
 .step-btn.plus{color:var(--green)}
 .step-btn:active{background:var(--green-pale);border-color:var(--green-light)}
-.step-display{min-width:44px;text-align:center;font-size:18px;font-weight:700;color:#1a2e1a}
-.step-display.zero{color:#d1d5db}
+.step-num{min-width:44px;text-align:center;font-size:18px;font-weight:700;color:#1a2e1a}
+.step-num.zero{color:#d1d5db}
 .step-sub{font-size:13px;font-weight:700;color:var(--green-mid);min-width:64px;text-align:right}
 .step-sub.zero{color:transparent}
-.total-bar{position:fixed;bottom:0;left:0;right:0;background:var(--green-dark);color:white;padding:11px 16px;z-index:100;box-shadow:0 -3px 14px rgba(0,0,0,.2)}
-.total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
-.total-lbl{font-size:12px;opacity:.7}
-.total-sel{font-size:11px;opacity:.5;margin-top:1px}
-.total-amt{font-size:23px;font-weight:700;color:#86efac}
-.go-btn{width:100%;padding:13px;background:var(--green-mid);color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
-.go-btn:disabled{opacity:.3;cursor:not-allowed}
-.drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end}
-.drawer-bg.open{display:flex}
-.drawer{background:white;border-radius:18px 18px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:18px 18px 36px;animation:up .22s ease-out}
-@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.drag{width:38px;height:4px;background:var(--gray-l);border-radius:2px;margin:0 auto 16px}
-.drawer-title{font-size:17px;font-weight:700;color:var(--green-dark);margin-bottom:4px}
-.drawer-note{font-size:12px;color:var(--gray);margin-bottom:14px;line-height:1.5}
-.order-box{background:var(--green-faint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
-.order-box-title{font-size:10px;font-weight:700;color:var(--green-dark);margin-bottom:7px;text-transform:uppercase;letter-spacing:.06em}
-.order-row{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;color:#374151}
-.order-total{display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:var(--red);border-top:1px solid var(--green-light);padding-top:8px;margin-top:6px}
-.fg{margin-bottom:12px}
-.fl{display:block;font-size:12px;font-weight:700;color:var(--gray);margin-bottom:4px}
-.fl.req::after{content:" *";color:var(--red)}
-.fi,.fs{width:100%;padding:10px 13px;border:1.5px solid var(--gray-l);border-radius:8px;font-size:15px;color:#1a2e1a;background:white;outline:none;transition:border-color .15s}
-.fi:focus{border-color:var(--green-mid)}
-.submit-btn{width:100%;padding:13px;background:var(--green-mid);color:white;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px}
-..suc-bg{display:none;background:#f4f7f4;flex-direction:column;min-height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.suc-bg.open{display:flex}
-.suc-inner{padding:20px 18px 80px;max-width:560px;margin:0 auto;width:100%}
-@keyframes pop{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
-.suc-icon{font-size:40px;margin-bottom:6px;text-align:center}
-.suc-title{font-size:18px;font-weight:700;color:var(--green-dark);margin-bottom:4px;text-align:center}
-.suc-sub{font-size:12px;color:var(--gray);text-align:center;margin-bottom:20px}
-.step-card{background:white;border-radius:12px;border:1.5px solid var(--gray-l);padding:14px 16px;margin-bottom:10px}
-.step-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--green-dark);color:white;font-size:12px;font-weight:700;margin-right:8px;flex-shrink:0}
-.step-title{font-size:14px;font-weight:700;color:#1a2e1a;display:flex;align-items:center;margin-bottom:10px}
-.order-txt-box{background:var(--green-faint);border-radius:8px;padding:12px;font-size:11.5px;color:#374151;line-height:1.8;white-space:pre-wrap;word-break:break-all;border:1px solid var(--green-light);margin-bottom:10px}
-.btn-copy-order{width:100%;padding:10px;background:var(--green-pale);color:var(--green-dark);border:1.5px solid var(--green-light);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
-.btn-line{width:100%;padding:14px;background:#06C755;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.step-hint{font-size:12px;color:var(--gray);margin-top:8px;line-height:1.6}
-.radio-row{display:flex;flex-direction:column;gap:8px;margin-top:2px}
-.radio-opt{display:flex;align-items:center;gap:10px;font-size:14px;color:#1a2e1a;padding:10px 13px;border:1.5px solid var(--gray-l);border-radius:8px;cursor:pointer;transition:border-color .15s,background .15s}
-.radio-opt:has(input:checked){border-color:var(--green-mid);background:var(--green-faint)}
-.radio-opt input[type=radio]{width:18px;height:18px;accent-color:var(--green-mid);cursor:pointer;flex-shrink:0}
-.btn-again{width:100%;padding:11px;background:var(--bg);border:1.5px solid var(--gray-l);border-radius:10px;font-size:13px;color:var(--gray);cursor:pointer;font-weight:600}
+
+/* ── Credit bar ── */
 .credit-bar{background:#FEF3C7;border-top:3px solid #F59E0B;border-bottom:3px solid #F59E0B;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .credit-label{font-size:15px;color:#92400E;font-weight:700;flex:1}
 .credit-sub{font-size:12px;color:#B45309;margin-top:3px}
-.credit-toggle{display:flex;align-items:center;gap:8px}
 .cred-sw{width:52px;height:30px;border-radius:15px;background:#D1D5DB;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none}
 .cred-sw.on{background:#D97706}
 .cred-sw-k{width:24px;height:24px;border-radius:50%;background:white;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 2px 4px rgba(0,0,0,.25)}
 .cred-sw.on .cred-sw-k{left:25px}
-.credit-toggle-lbl{font-size:14px;font-weight:700;color:#92400E;min-width:48px}
+.cred-toggle-lbl{font-size:14px;font-weight:700;color:#92400E;min-width:48px}
+
+/* ── Total bar ── */
+.total-bar{background:var(--green-dark);color:white;padding:11px 16px}
+.total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.total-lbl{font-size:12px;opacity:.7}
+.total-sel{font-size:11px;opacity:.5;margin-top:1px}
+.total-amt{font-size:23px;font-weight:700;color:#86efac}
 .total-detail{font-size:11px;opacity:.6;margin-top:1px}
+.go-btn{width:100%;padding:13px;background:var(--green-mid);color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
+.go-btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* ── Lightbox view ── */
+#viewLightbox{background:#000}
+.lb-close-bar{padding:12px 16px;display:flex;justify-content:flex-end}
+.lb-close{background:rgba(255,255,255,.2);color:white;border:none;border-radius:20px;padding:8px 16px;font-size:14px;cursor:pointer}
+.lb-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:8px}
+.lb-img-wrap img{width:100%;height:auto}
+
+/* ── Form view ── */
+#viewForm{background:var(--bg)}
+.form-hdr{background:var(--green-dark);color:white;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.form-back{background:rgba(255,255,255,.2);color:white;border:none;border-radius:20px;padding:7px 14px;font-size:13px;cursor:pointer}
+.form-hdr-title{font-size:16px;font-weight:700}
+.form-body{padding:16px;flex:1;overflow-y:auto}
+.order-box{background:var(--green-faint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.order-box-title{font-size:10px;font-weight:700;color:var(--green-dark);margin-bottom:7px;text-transform:uppercase;letter-spacing:.06em}
+.order-row{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;color:#374151}
+.order-row.discount{color:var(--green-mid)}
+.order-total{display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:var(--red);border-top:1px solid var(--green-light);padding-top:8px;margin-top:6px}
+.fg{margin-bottom:12px}
+.fl{display:block;font-size:12px;font-weight:700;color:var(--gray);margin-bottom:4px}
+.fl.req::after{content:" *";color:var(--red)}
+.fi{width:100%;padding:10px 13px;border:1.5px solid var(--gray-l);border-radius:8px;font-size:15px;color:#1a2e1a;background:white;outline:none;transition:border-color .15s}
+.fi:focus{border-color:var(--green-mid)}
+.radio-row{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.radio-opt{display:flex;align-items:center;gap:10px;font-size:14px;color:#1a2e1a;padding:10px 13px;border:1.5px solid var(--gray-l);border-radius:8px;cursor:pointer}
+.radio-opt:has(input:checked){border-color:var(--green-mid);background:var(--green-faint)}
+.radio-opt input[type=radio]{width:18px;height:18px;accent-color:var(--green-mid);flex-shrink:0}
+.pickup-fixed{padding:10px 13px;background:var(--green-faint);border:1.5px solid var(--green-light);border-radius:8px;font-size:14px;color:var(--green-dark);font-weight:600}
+.submit-btn{width:100%;padding:13px;background:var(--green-mid);color:white;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px}
+
+/* ── Success view ── */
+#viewSuccess{background:var(--bg);padding:28px 18px 60px;align-items:center}
+.suc-icon{font-size:48px;margin-bottom:10px}
+.suc-title{font-size:20px;font-weight:700;color:var(--green-dark);margin-bottom:6px}
+.suc-sub{font-size:13px;color:var(--gray);text-align:center;margin-bottom:24px}
+.suc-card{background:white;border-radius:12px;border:1.5px solid var(--gray-l);padding:16px;width:100%;max-width:480px;margin-bottom:12px}
+.suc-card-title{font-size:13px;font-weight:700;color:var(--green-dark);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.suc-step-num{width:24px;height:24px;border-radius:50%;background:var(--green-dark);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.order-txt{background:var(--green-faint);border-radius:8px;padding:12px;font-size:12px;color:#374151;line-height:1.8;white-space:pre-wrap;word-break:break-all;border:1px solid var(--green-light);margin-bottom:10px}
+.btn-copy{width:100%;padding:11px;background:var(--green-pale);color:var(--green-dark);border:1.5px solid var(--green-light);border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
+.btn-line{width:100%;padding:13px;background:#06C755;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
+.step-hint{font-size:12px;color:var(--gray);margin-top:8px;line-height:1.6}
+.btn-back{width:100%;max-width:480px;padding:11px;background:white;border:1.5px solid var(--gray-l);border-radius:10px;font-size:13px;color:var(--gray);cursor:pointer;font-weight:600}
 </style>
 </head>
 <body>
 
-<div class="hdr">
-  <div class="hdr-title">🌿 好森嚴選  五月號</div>
-  <div class="hdr-sub">把美好的日常 帶回家</div>
-  <div class="hdr-note">對照文宣圖找到想要的商品，按 ＋ 增加數量，選好後按底部「送出登記」。<br>登記至 <strong>5/25（一）</strong>截止</div>
+<!-- ── VIEW: MAIN ── -->
+<div class="view active" id="viewMain">
+  <div class="hdr">
+    <div class="hdr-title">🌿 好森嚴選  五月號</div>
+    <div class="hdr-sub">把美好的日常 帶回家</div>
+    <div class="hdr-note">對照文宣圖找到商品，按 ＋ 增加數量，選好後按底部「送出登記」。<br>登記至 <strong>5/25（一）</strong>截止</div>
+  </div>
+  <div class="flyer-wrap" onclick="showView('viewLightbox')" ontouchstart="" style="cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,.1)">
+    <img class="flyer-img" src="好森嚴選文宣_2026_05月-06.jpg" alt="好森嚴選五月號文宣" style="pointer-events:none">
+    <div class="flyer-cap">▲ 點擊放大文宣  ·  對照字母 A–O 選購</div>
+  </div>
+  <div id="area" style="flex:1"></div>
+  <div class="credit-bar">
+    <div>
+      <div class="credit-label">🎁 使用 $300 購物金折抵</div>
+      <div class="credit-sub" id="creditSubtxt">點右側開關即可折抵</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="cred-sw" id="credSw" onclick="toggleCredit()"><div class="cred-sw-k"></div></button>
+      <span class="cred-toggle-lbl" id="credLbl">不使用</span>
+    </div>
+  </div>
+  <div class="total-bar">
+    <div class="total-row">
+      <div>
+        <div class="total-lbl">目前合計</div>
+        <div class="total-sel" id="selSummary">尚未選擇商品</div>
+      </div>
+      <div>
+        <div class="total-amt" id="totalAmt">$0</div>
+        <div class="total-detail" id="totalDetail"></div>
+      </div>
+    </div>
+    <button class="go-btn" id="goBtn" onclick="showForm()" disabled>填寫資料  送出登記 →</button>
+  </div>
 </div>
 
-<div id="mainContent"><div class="flyer-block">
-  <img class="flyer-img" src="好森嚴選文宣_2026_05月-06.jpg" alt="好森嚴選五月號文宣" onclick="openLightbox()">
-  <div class="flyer-caption">▲ 點擊放大文宣  ·  對照字母 A–P 選購</div>
-</div>
-
-<div class="lightbox" id="lb">
-  <button class="lb-close" onclick="closeLightbox()">✕</button>
-  <div class="lightbox-inner" onclick="closeLightbox()">
+<!-- ── VIEW: LIGHTBOX ── -->
+<div class="view" id="viewLightbox">
+  <div class="lb-close-bar">
+    <button class="lb-close" onclick="showView('viewMain')">✕ 關閉</button>
+  </div>
+  <div class="lb-img-wrap">
     <img src="好森嚴選文宣_2026_05月-06.jpg" alt="好森嚴選五月號文宣">
   </div>
 </div>
 
-<div id="area"></div>
-
-<div id="totalBarWrap"><div class="credit-bar" id="creditBar">
-  <div>
-    <div class="credit-label">🎁 使用 $300 購物金折抵</div>
-    <div class="credit-sub" id="creditSubtxt">點右側開關即可折抵</div>
+<!-- ── VIEW: FORM ── -->
+<div class="view" id="viewForm">
+  <div class="form-hdr">
+    <button class="form-back" onclick="showView('viewMain')">← 返回</button>
+    <span class="form-hdr-title">✏️ 填寫登記資料</span>
   </div>
-  <div class="credit-toggle">
-    <button class="cred-sw" id="credSw" onclick="toggleCredit()"><div class="cred-sw-k"></div></button>
-    <span class="credit-toggle-lbl" id="credLbl">不使用</span>
-  </div>
-</div>
-<div class="total-bar">
-  <div class="total-row">
-    <div>
-      <div class="total-lbl">目前合計</div>
-      <div class="total-sel" id="selSummary">尚未選擇商品</div>
-    </div>
-    <div>
-      <div class="total-amt" id="totalAmt">$0</div>
-      <div class="total-detail" id="totalDetail"></div>
-    </div>
-  </div>
-  <button class="go-btn" id="goBtn" onclick="openDrawer()" disabled>填寫資料  送出登記 →</button>
-</div></div>
-
-<div class="drawer-bg" id="drawerBg" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="drawer">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="width:38px;height:4px;background:var(--gray-l);border-radius:2px;flex:1;margin:0 auto"></div></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="drawer-title" style="margin:0">✏️ 填寫登記資料</div><button onclick="document.getElementById('drawerBg').classList.remove('open')" style="background:var(--gray-l);border:none;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer;color:var(--gray);flex-shrink:0">×</button></div>
-    <div class="drawer-note">確認選購清單後填好資料送出，我們會盡快與您確認。</div>
+  <div class="form-body">
     <div class="order-box" id="orderBox"></div>
     <div class="fg">
       <label class="fl">是否使用 $300 購物金</label>
@@ -167,16 +189,14 @@ body{font-family:-apple-system,'Noto Sans TC','PingFang TC',sans-serif;backgroun
         <label class="radio-opt"><input type="radio" name="formCredit" value="yes" onchange="toggleFormCredit(true)"> 🎁 是，折抵 $300</label>
         <label class="radio-opt"><input type="radio" name="formCredit" value="no" checked onchange="toggleFormCredit(false)"> 不使用</label>
       </div>
-      <div id="formCreditNote" style="display:none;margin-top:6px;font-size:12px;color:var(--green-mid);font-weight:600;padding:6px 10px;background:var(--green-faint);border-radius:6px">✓ 已套用 $300 折抵，合計將調整</div>
     </div>
     <div class="fg"><label class="fl req">小朋友稱呼／姓名</label><input class="fi" id="fName" placeholder="例：小明、Amy"></div>
     <div class="fg"><label class="fl req">LINE 暱稱</label><input class="fi" id="fLine" placeholder="方便我們在 LINE 上聯繫您"></div>
     <div class="fg">
       <label class="fl">取貨方式</label>
-      <div style="padding:10px 13px;background:#f0fbf3;border:1.5px solid var(--green-light);border-radius:8px;font-size:14px;color:var(--green-dark);font-weight:600">🌿 好森自取</div>
+      <div class="pickup-fixed">🌿 好森自取</div>
       <input type="hidden" id="fPickup" value="好森自取">
     </div>
-
     <div class="fg">
       <label class="fl req">付款方式</label>
       <div class="radio-row">
@@ -185,37 +205,31 @@ body{font-family:-apple-system,'Noto Sans TC','PingFang TC',sans-serif;backgroun
         <label class="radio-opt"><input type="radio" name="payment" value="匯款"> 🏦 匯款</label>
       </div>
     </div>
-    <div class="fg"><label class="fl">備註（款式、尺寸、其他說明）</label><input class="fi" id="fNote" placeholder="例：未來小車想要流金黃款"></div>
+    <div class="fg"><label class="fl">備註（款式、尺寸、其他說明）</label><input class="fi" id="fNote" placeholder="例：T恤 L號"></div>
     <button class="submit-btn" onclick="submitOrder()">🌿 確認送出登記</button>
   </div>
 </div>
 
-</div><!-- end mainContent -->
-<div class="suc-bg" id="sucBg">
-  <div class="suc-inner">
-    <div class="suc-icon">🌿</div>
-    <div class="suc-title">登記完成！</div>
-    <div class="suc-sub" id="sucMsg"></div>
-
-    <div class="step-card">
-      <div class="step-title"><span class="step-num">1</span>複製訂單明細</div>
-      <div class="order-txt-box" id="orderTxtBox"></div>
-      <button class="btn-copy-order" id="copyBtn" onclick="copyOrder()">📋 點此複製訂單明細</button>
-    </div>
-
-    <div class="step-card">
-      <div class="step-title"><span class="step-num">2</span>開啟好森官方 LINE</div>
-      <button class="btn-line" onclick="openLine()">💬 開啟好森 Awesome! 官方 LINE</button>
-      <div class="step-hint">開啟後點「聊天」→ 長按貼上剛才複製的訂單 → 傳送<br>我們收到後會盡快確認 🌿</div>
-    </div>
-
-    <button class="btn-again" onclick="resetAll()">← 繼續瀏覽商品</button>
+<!-- ── VIEW: SUCCESS ── -->
+<div class="view" id="viewSuccess">
+  <div class="suc-icon">🌿</div>
+  <div class="suc-title">登記完成！</div>
+  <div class="suc-sub" id="sucMsg"></div>
+  <div class="suc-card">
+    <div class="suc-card-title"><span class="suc-step-num">1</span>複製訂單明細</div>
+    <div class="order-txt" id="orderTxtBox"></div>
+    <button class="btn-copy" id="copyBtn" onclick="copyOrder()">📋 點此複製訂單明細</button>
   </div>
+  <div class="suc-card">
+    <div class="suc-card-title"><span class="suc-step-num">2</span>開啟好森官方 LINE</div>
+    <button class="btn-line" onclick="openLine()">💬 開啟好森 Awesome! 官方 LINE</button>
+    <div class="step-hint">開啟後點「聊天」→ 長按貼上剛才複製的訂單 → 傳送<br>我們收到後會盡快確認 🌿</div>
+  </div>
+  <button class="btn-back" onclick="resetAll()">← 繼續瀏覽商品</button>
 </div>
 
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzdAZ9ayAwnSvensJAFd18FgXp1UrMBS_T6s_nKSXzSbVNUNAzZnjFx8DzpdDnXbSFm/exec';
-
 const BRANDS = [
   { name:'豪聲樂器 HAOSEN', desc:'MIT優質樂器 · 代理全球知名品牌', products:[
     {id:'A', name:'6吋獅子手鼓',       price:420, orig:505,  sub:'Made by Remo'},
@@ -238,8 +252,18 @@ const BRANDS = [
   ]},
 ];
 
+const TSHIRT_IDS = ['M','N'];
 let qty={}, lastTxt='', useCredit=false;
 
+// ── View management ──
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='viewMain'){render();updateTotal();}
+  window.scrollTo(0,0);
+}
+
+// ── Render ──
 function render(){
   document.getElementById('area').innerHTML = BRANDS.map(b=>
     `<div class="brand-block">
@@ -252,12 +276,25 @@ function render(){
   ).join('');
 }
 
+function effectivePrice(id){
+  const p=findP(id); if(!p)return 0;
+  if(TSHIRT_IDS.includes(id)){
+    const n=TSHIRT_IDS.reduce((s,t)=>s+(qty[t]||0),0);
+    return n>=2 ? 500 : p.price;
+  }
+  return p.price;
+}
+function tshirtDiscount(){return TSHIRT_IDS.reduce((s,t)=>s+(qty[t]||0),0)>=2;}
+
 function renderCard(p){
-  const q=qty[p.id]||0, disc=Math.round((1-p.price/p.orig)*100);
-  const isTshirt = TSHIRT_IDS.includes(p.id);
-  const effP = effectivePrice(p.id);
-  const discountOn = isTshirt && tshirtDiscountActive();
-  const subAmt = q > 0 ? effP * q : 0;
+  const q=qty[p.id]||0;
+  const disc=Math.round((1-p.price/p.orig)*100);
+  const effP=effectivePrice(p.id);
+  const tDisc=TSHIRT_IDS.includes(p.id)&&tshirtDiscount();
+  const sub=q>0?effP*q:0;
+  const priceHtml=tDisc
+    ? `<s style="font-size:11px;color:#9ca3af">$${p.price}</s> <span style="color:var(--red);font-size:15px;font-weight:700">$500</span>`
+    : `$${p.price.toLocaleString()}`;
   return `<div class="prod-card" id="card-${p.id}">
     <div class="card-top">
       <div class="letter">${p.id}</div>
@@ -265,12 +302,12 @@ function renderCard(p){
         <div class="prod-name">${p.name}</div>
         ${p.sub?`<div class="prod-sub">${p.sub}</div>`:''}
         <div class="prod-tags">
-          ${p.tag?`<span class="tag tag-dis">${p.tag}</span>`:''}
-          ${discountOn?'<span class="tag" style="background:#FEF3C7;color:#92400E">2件優惠 $500</span>':''}
+          ${p.tag?`<span class="tag tag-pre">${p.tag}</span>`:''}
+          ${tDisc?'<span class="tag tag-sale">2件優惠 $500</span>':''}
         </div>
       </div>
       <div class="prod-price">
-        <div class="prod-sale" id="price-${p.id}">${discountOn?`<s style="font-size:11px;color:#9ca3af">$580</s> <span style="color:var(--red)">$500</span>`:'$'+p.price.toLocaleString()}</div>
+        <div class="prod-sale">${priceHtml}</div>
         <div class="prod-orig">$${p.orig.toLocaleString()}</div>
         <div class="prod-disc">省${disc}%</div>
       </div>
@@ -279,10 +316,10 @@ function renderCard(p){
       <span class="qty-label">數量</span>
       <div class="stepper">
         <button class="step-btn minus" onclick="chg('${p.id}',-1)">－</button>
-        <span class="step-display ${q===0?'zero':''}" id="n-${p.id}">${q}</span>
+        <span class="step-num ${q===0?'zero':''}" id="n-${p.id}">${q}</span>
         <button class="step-btn plus" onclick="chg('${p.id}',1)">＋</button>
       </div>
-      <span class="step-sub ${q===0?'zero':''}" id="sub-${p.id}">${subAmt>0?'$'+subAmt.toLocaleString():''}</span>
+      <span class="step-sub ${q===0?'zero':''}" id="sub-${p.id}">${sub>0?'$'+sub.toLocaleString():''}</span>
     </div>
   </div>`;
 }
@@ -290,196 +327,116 @@ function renderCard(p){
 function chg(id,d){
   const p=findP(id); if(!p)return;
   qty[id]=Math.max(0,(qty[id]||0)+d);
-  const q=qty[id];
-  // If T-shirt, re-render both T-shirt cards to update discount state
   if(TSHIRT_IDS.includes(id)){
-    TSHIRT_IDS.forEach(tid => {
-      const card = document.getElementById('card-'+tid);
-      if(card){
-        const tp = findP(tid);
-        if(tp){
-          const tq = qty[tid]||0;
-          card.outerHTML = renderCard(tp);
-        }
-      }
+    // Re-render both T-shirt cards to update discount badge
+    TSHIRT_IDS.forEach(tid=>{
+      const el=document.getElementById('card-'+tid);
+      if(el){const tmp=document.createElement('div');tmp.innerHTML=renderCard(findP(tid));el.replaceWith(tmp.firstChild);}
     });
   } else {
+    const q=qty[id];
     const ne=document.getElementById('n-'+id), se=document.getElementById('sub-'+id);
-    if(ne){ne.textContent=q; ne.className='step-display'+(q===0?' zero':'');}
-    if(se){const ep=effectivePrice(id);se.textContent=q>0?'$'+(ep*q).toLocaleString():''; se.className='step-sub'+(q===0?' zero':'');}
+    if(ne){ne.textContent=q;ne.className='step-num'+(q===0?' zero':'');}
+    if(se){const ep=effectivePrice(id);se.textContent=q>0?'$'+(ep*q).toLocaleString():'';se.className='step-sub'+(q===0?' zero':'');}
   }
   updateTotal();
 }
-function findP(id){for(const b of BRANDS)for(const p of b.products)if(p.id===id)return p;}
 
-// T-shirt 2件以上優惠 $500/件
-const TSHIRT_IDS = ['M','N'];
-function effectivePrice(id){
-  const p = findP(id);
-  if(!p) return 0;
-  if(TSHIRT_IDS.includes(id)){
-    const totalTshirts = TSHIRT_IDS.reduce((s,tid)=>s+(qty[tid]||0), 0);
-    return totalTshirts >= 2 ? 500 : p.price;
-  }
-  return p.price;
-}
-function tshirtDiscountActive(){
-  return TSHIRT_IDS.reduce((s,tid)=>s+(qty[tid]||0), 0) >= 2;
-}
-function getSel(){return Object.keys(qty).filter(id=>qty[id]>0).map(id=>({...findP(id),qty:qty[id],effPrice:effectivePrice(id)})).filter(Boolean);}
-function toggleCredit(){
-  useCredit=!useCredit;
-  const sw=document.getElementById('credSw');
-  const lbl=document.getElementById('credLbl');
-  const sub=document.getElementById('creditSubtxt');
-  sw.classList.toggle('on', useCredit);
-  lbl.textContent = useCredit ? '使用中' : '不使用';
-  sub.textContent = useCredit ? '已折抵 $300，將從合計中扣除' : '點右側開關即可折抵';
-  updateTotal();
-}
+function findP(id){for(const b of BRANDS)for(const p of b.products)if(p.id===id)return p;}
+function getSel(){return Object.keys(qty).filter(id=>qty[id]>0).map(id=>({...findP(id),qty:qty[id],ep:effectivePrice(id)})).filter(Boolean);}
+
 function updateTotal(){
   const sel=getSel();
-  const subtotal=sel.reduce((s,p)=>s+(p.effPrice||p.price)*p.qty,0);
+  const sub=sel.reduce((s,p)=>s+(p.ep||p.price)*p.qty,0);
+  const total=Math.max(0,sub-(useCredit?300:0));
   const count=sel.reduce((s,p)=>s+p.qty,0);
-  const discount = (useCredit && subtotal>0) ? 300 : 0;
-  const total = Math.max(0, subtotal - discount);
   document.getElementById('totalAmt').textContent='$'+total.toLocaleString();
-  const detailEl=document.getElementById('totalDetail');
-  if(discount>0){
-    detailEl.textContent=`商品 $${subtotal.toLocaleString()} － 購物金 $300`;
-  } else {
-    detailEl.textContent='';
-  }
+  document.getElementById('totalDetail').textContent=useCredit&&sub>0?`商品 $${sub.toLocaleString()} ─ 購物金 $300`:'';
   document.getElementById('selSummary').textContent=count>0?`已選 ${count} 件商品`:'尚未選擇商品';
   document.getElementById('goBtn').disabled=count===0;
 }
-function openDrawer(){
-  const sel=getSel(); if(!sel.length)return;
-  const subtotal=sel.reduce((s,p)=>s+(p.effPrice||p.price)*p.qty,0);
-  const total=Math.max(0, subtotal - (useCredit?300:0));
-  document.getElementById('orderBox').innerHTML=
-    '<div class="order-box-title">你的選購清單</div>'+
-    sel.map(p=>`<div class="order-row"><span>${p.id}. ${p.name} ×${p.qty}</span><span>$${(p.price*p.qty).toLocaleString()}</span></div>`).join('')+
-    `<div class="order-total"><span>合計</span><span>$${total.toLocaleString()}</span></div>`;
-  // Reset credit radio to match current state
-  const radios = document.querySelectorAll('input[name="formCredit"]');
-  radios.forEach(r => r.checked = (r.value === (useCredit?'yes':'no')));
-  const note = document.getElementById('formCreditNote');
-  if(note) note.style.display = useCredit ? 'block' : 'none';
-  const db=document.getElementById('drawerBg');
-  db.style.display='flex';
-  db.classList.add('open');
+
+// ── Credit toggle ──
+function toggleCredit(){
+  useCredit=!useCredit;
+  document.getElementById('credSw').classList.toggle('on',useCredit);
+  document.getElementById('credLbl').textContent=useCredit?'使用中':'不使用';
+  document.getElementById('creditSubtxt').textContent=useCredit?'已折抵 $300，將從合計中扣除':'點右側開關即可折抵';
+  updateTotal();
 }
+function toggleFormCredit(use){
+  useCredit=use;
+  document.getElementById('credSw').classList.toggle('on',use);
+  document.getElementById('credLbl').textContent=use?'使用中':'不使用';
+  document.getElementById('creditSubtxt').textContent=use?'已折抵 $300，將從合計中扣除':'點右側開關即可折抵';
+  renderOrderBox();
+  updateTotal();
+}
+
+// ── Form ──
+function renderOrderBox(){
+  const sel=getSel();
+  const sub=sel.reduce((s,p)=>s+(p.ep||p.price)*p.qty,0);
+  const total=Math.max(0,sub-(useCredit?300:0));
+  let rows='<div class="order-box-title">你的選購清單</div>';
+  sel.forEach(p=>{
+    rows+='<div class="order-row"><span>'+p.id+'. '+p.name+' x'+p.qty+'</span><span>$'+((p.ep||p.price)*p.qty).toLocaleString()+'</span></div>';
+  });
+  if(useCredit) rows+='<div class="order-row discount"><span>🎁 購物金折抵</span><span>－$300</span></div>';
+  rows+='<div class="order-total"><span>合計</span><span>$'+total.toLocaleString()+'</span></div>';
+  document.getElementById('orderBox').innerHTML=rows;
+}
+function showForm(){
+  const sel=getSel(); if(!sel.length)return;
+  // Sync credit radio
+  document.querySelectorAll('input[name="formCredit"]').forEach(r=>r.checked=(r.value==='yes')?useCredit:!useCredit);
+  renderOrderBox();
+  showView('viewForm');
+}
+
 function submitOrder(){
   const name=document.getElementById('fName').value.trim();
   const line=document.getElementById('fLine').value.trim();
   const pickup=document.getElementById('fPickup').value;
   const note=document.getElementById('fNote').value.trim();
-  const credit = useCredit ? '使用 $300 購物金' : '不使用';
   const payment=document.querySelector('input[name="payment"]:checked')?.value||'';
   const sel=getSel();
   if(!name){alert('請填寫小朋友稱呼');document.getElementById('fName').focus();return;}
   if(!line){alert('請填寫 LINE 暱稱');document.getElementById('fLine').focus();return;}
-  const now=new Date(), ds=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
-  const subtotal=sel.reduce((s,p)=>s+(p.effPrice||p.price)*p.qty,0);
-  const total=Math.max(0,subtotal-(useCredit?300:0));
-  const lines=sel.map(p=>`${p.id}. ${p.name} x${p.qty}  $${((p.effPrice||p.price)*p.qty).toLocaleString()}${TSHIRT_IDS.includes(p.id)&&tshirtDiscountActive()?' (2件優惠價$500/件)':''}`).join('\n');
-  lastTxt=`【好森嚴選 五月號登記】\n時間：${ds}\n稱呼：${name}\nLINE：${line}${pickup?'\n取貨：'+pickup:''}\n付款：${payment}${credit==='使用 $300 購物金'?'\n購物金：使用 $300':''}\n────────────\n${lines}\n────────────\n合計：$${total.toLocaleString()}${note?'\n備註：'+note:''}\n（請將此訊息傳給好森嚴選確認）`;
+  const now=new Date();
+  const ds=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const sub=sel.reduce((s,p)=>s+(p.ep||p.price)*p.qty,0);
+  const total=Math.max(0,sub-(useCredit?300:0));
+  const credit=useCredit?'使用 $300 購物金':'不使用';
+  const lines=sel.map(p=>`${p.id}. ${p.name} x${p.qty}  $${((p.ep||p.price)*p.qty).toLocaleString()}${TSHIRT_IDS.includes(p.id)&&tshirtDiscount()?' (2件優惠$500/件)':''}`).join('\n');
+  lastTxt=`【好森嚴選 五月號登記】\n時間：${ds}\n稱呼：${name}\nLINE：${line}\n取貨：${pickup}\n付款：${payment}${useCredit?'\n購物金：使用 $300':''}\n────────────\n${lines}\n────────────\n合計：$${total.toLocaleString()}${note?'\n備註：'+note:''}\n（請將此訊息傳給好森嚴選確認）`;
   if(SHEETS_URL)fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({ds,name,line,pickup,payment,credit,note,items:lines,total})}).catch(()=>{});
-  const dbh=document.getElementById('drawerBg');
-  dbh.style.display='none';
-  dbh.classList.remove('open');
   document.getElementById('sucMsg').textContent=`${name} 您好，合計 $${total.toLocaleString()}，請照以下步驟完成傳送`;
   document.getElementById('orderTxtBox').textContent=lastTxt;
-  document.getElementById('mainContent').style.display='none';
-  document.getElementById('totalBarWrap').style.display='none';
-  document.body.style.overflow='';
-  const sb=document.getElementById('sucBg');
-  sb.style.display='flex';
-  sb.classList.add('open');
-  window.scrollTo(0,0);
+  showView('viewSuccess');
+}
 
-  document.body.style.overflow='hidden';
-  document.getElementById('sucBg').scrollTop=0;
-}
-function toggleFormCredit(use){
-  useCredit = use;
-  updateTotal();
-  const note = document.getElementById('formCreditNote');
-  if(note) note.style.display = use ? 'block' : 'none';
-  // Update order summary in form
-  const sel = getSel();
-  const total = Math.max(0, sel.reduce((s,p)=>s+p.price*p.qty,0) - (use?300:0));
-  const subtotal = sel.reduce((s,p)=>s+p.price*p.qty,0);
-  const box = document.getElementById('orderBox');
-  if(box){
-    const discountRow = use ? `<div class="order-row" style="color:var(--green-mid)"><span>🎁 購物金折抵</span><span>－$300</span></div>` : '';
-    box.innerHTML =
-      '<div class="order-box-title">你的選購清單</div>' +
-      sel.map(p=>`<div class="order-row"><span>${p.id}. ${p.name} ×${p.qty}</span><span>$${(p.price*p.qty).toLocaleString()}</span></div>`).join('') +
-      discountRow +
-      `<div class="order-total"><span>合計</span><span>$${total.toLocaleString()}</span></div>`;
-  }
-}
-function openLine(){
-  const mob=/Android|iPhone|iPad/i.test(navigator.userAgent);
-  window.open(mob ? 'line://ti/p/@ffz5958f' : 'https://line.me/R/ti/p/@ffz5958f', '_blank');
-}
 function copyOrder(){
   const btn=document.getElementById('copyBtn');
-  const doFeedback=()=>{if(btn){btn.textContent='✅ 已複製！';btn.style.background='var(--green-pale)';setTimeout(()=>{btn.textContent='📋 點此複製訂單明細';},2500);}};
-  if(navigator.clipboard){navigator.clipboard.writeText(lastTxt).then(doFeedback).catch(()=>{fallbackCopy();doFeedback();});}
-  else{fallbackCopy();doFeedback();}
+  const done=()=>{btn.textContent='✅ 已複製！';setTimeout(()=>btn.textContent='📋 點此複製訂單明細',2500);};
+  if(navigator.clipboard)navigator.clipboard.writeText(lastTxt).then(done).catch(()=>{fallbackCopy();done();});
+  else{fallbackCopy();done();}
 }
 function fallbackCopy(){const ta=document.createElement('textarea');ta.value=lastTxt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);}
+function openLine(){const m=/Android|iPhone|iPad/i.test(navigator.userAgent);window.open(m?'line://ti/p/@ffz5958f':'https://line.me/R/ti/p/@ffz5958f','_blank');}
+
 function resetAll(){
-  qty={};
-  const sbr=document.getElementById('sucBg');
-  sbr.style.display='none';
-  sbr.classList.remove('open');
-  document.getElementById('mainContent').style.display='';
-  document.getElementById('totalBarWrap').style.display='';
-  document.getElementById('creditBar').style.display='';
-  document.getElementById('totalBarWrap').style.display='';
-  document.body.style.overflow='';
-  useCredit=false;
-  const sw=document.getElementById('credSw');
-  const lbl=document.getElementById('credLbl');
-  const sub=document.getElementById('creditSubtxt');
-  if(sw) sw.classList.remove('on');
-  if(lbl) lbl.textContent='不使用';
-  if(sub) sub.textContent='點右側開關即可折抵';
+  qty={}; useCredit=false;
+  document.getElementById('credSw').classList.remove('on');
+  document.getElementById('credLbl').textContent='不使用';
+  document.getElementById('creditSubtxt').textContent='點右側開關即可折抵';
   ['fName','fLine','fNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const payment=document.querySelector('input[name="payment"]');
-  if(payment) document.querySelectorAll('input[name="payment"]').forEach((r,i)=>r.checked=i===0);
+  document.querySelectorAll('input[name="payment"]').forEach((r,i)=>r.checked=i===0);
   document.querySelectorAll('input[name="formCredit"]').forEach(r=>r.checked=r.value==='no');
-  const fcNote=document.getElementById('formCreditNote');
-  if(fcNote) fcNote.style.display='none';
-  render();
-  updateTotal();
+  render(); updateTotal();
+  showView('viewMain');
 }
-// Safety reset on page load
-const _sb=document.getElementById('sucBg');
-_sb.style.display='none';
-_sb.classList.remove('open');
-document.body.style.overflow='';
-const _mc=document.getElementById('mainContent');
-if(_mc)_mc.style.display='';
-function openLightbox(){
-  const lb=document.getElementById('lb');
-  lb.style.display='block';
-  lb.classList.add('open');
-  document.getElementById('mainContent').style.display='none';
-  document.getElementById('totalBarWrap').style.display='none';
-  window.scrollTo(0,0);
-}
-function closeLightbox(){
-  const lb=document.getElementById('lb');
-  lb.style.display='none';
-  lb.classList.remove('open');
-  document.getElementById('mainContent').style.display='';
-  document.getElementById('totalBarWrap').style.display='';
-}
+
 render(); updateTotal();
 </script>
 </body>
